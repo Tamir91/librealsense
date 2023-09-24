@@ -20,4 +20,4 @@ jobs:
          echo "var=$var" >> $GITHUB_OUTPUT
       - name: "second-step"
         run: |
-         echo ${{var}}
+         echo ${{steps.vars.outputs.var}}
