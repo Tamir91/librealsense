@@ -1,0 +1,23 @@
+name: Test on Ubuntu shell
+# The aim of this test derminate minimal supported CMake version for LibRS project
+# and check if it equlas to expected minimal CMAke version
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  simple-test:
+    name: "simple-test" 
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: "first-step"
+        run: |
+         var="my text"
+         echo "var=$var" >> $GITHUB_OUTPUT
+      - name: "second-step"
+        run: |
+         echo ${{var}}
