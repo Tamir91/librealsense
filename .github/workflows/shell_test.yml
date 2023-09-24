@@ -18,6 +18,8 @@ jobs:
         run: |
          var="my text"
          echo "var=$var" >> $GITHUB_OUTPUT
+         echo "${{steps.vars.outputs.var}}"
+
       - name: "second-step"
         run: |
          echo "${{steps.vars.outputs.var}}"
