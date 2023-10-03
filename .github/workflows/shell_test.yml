@@ -1,4 +1,4 @@
-name: Test on Ubuntu shell
+name: Test Zona
 # The aim of this test derminate minimal supported CMake version for LibRS project
 # and check if it equlas to expected minimal CMAke version
 
@@ -9,17 +9,12 @@ on:
 jobs:
   simple-test:
     name: "simple-test" 
-    runs-on: ubuntu-20.04
+    runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: "first-step"
-        id: first-st
-        run: |
-         var="my text"
-         echo "var=$var" >> $GITHUB_OUTPUT
-
-      - name: "second-step"
-        run: |
-         echo "${{steps.first-st.outputs.var}}"
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+        with:
+          vs-version: '[15.9)'
