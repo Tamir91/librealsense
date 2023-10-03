@@ -6,6 +6,9 @@ on:
   push:
   pull_request:
 
+env:
+  WIN_BUILD_DIR: C:/lrs_build
+
 jobs:
   simple-test:
     name: "simple-test" 
@@ -19,3 +22,14 @@ jobs:
         with:
           vs-version: '[15.8,15.9)'
           msbuild-architecture: x64
+
+      - name: Build
+        shell: bash
+        run: |
+          mkdir ${{env.WIN_BUILD_DIR}}
+          LRS_SRC_DIR=$(pwd)
+          cd ${{env.WIN_BUILD_DIR}}
+          pwd
+          ls        
+          cmake ${LRS_SRC_DIR} -G "Visual Studio 15 2017" -DBUILD_SHARED_LIBS=true -DBUILD_EXAMPLES=false -DBUILD_TOOLS=false -DCHECK_FOR_UPDATES=false
+       
