@@ -31,5 +31,5 @@ jobs:
           cd ${{env.WIN_BUILD_DIR}}
           pwd
           ls        
-          cmake ${LRS_SRC_DIR} -G "Visual Studio 15 2017" -DBUILD_SHARED_LIBS=true -DBUILD_EXAMPLES=false -DBUILD_TOOLS=false -DCHECK_FOR_UPDATES=false
+          cmake ${LRS_SRC_DIR} -G "Visual Studio 17 2022" -DBUILD_SHARED_LIBS=true -DBUILD_EXAMPLES=false -DBUILD_TOOLS=false -DCHECK_FOR_UPDATES=false
        
