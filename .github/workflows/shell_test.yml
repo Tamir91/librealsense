@@ -14,7 +14,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Add msbuild to PATH
+      - name: Add msbuild to PATH_
         uses: microsoft/setup-msbuild@v1.1
         with:
           vs-version: '[15.9)'
