@@ -17,18 +17,7 @@ jobs:
 
       - name: "Get Current CMake version"
         id: cmake_version
-        run: |
-          work_dir=$(pwd)
-          cd ..
-          
-          cd cmake_min_version
-          venv/bin/python3 cmake_downloader.py --first_minor
-          output=$(venv/bin/python3 cmake_min_version.py $work_dir)
-          echo $output
-          
-          # Retrieve CMake minimal version from the last line of the tool output.
-          current_cmake_version=$(echo ${output} | grep -oP "VERSION \d+\.\d+")
-           
+        run: |      
           current_cmake_major_ver=$(echo "VERSION 3.8.0" | grep -oP "\d+\.\d+" | cut -d'.' -f 1)
           current_cmake_minor_ver=$(echo "VERSION 3.8.0" | grep -oP "\d+\.\d+" | cut -d'.' -f 2)
 
