@@ -18,8 +18,8 @@ jobs:
       - name: "Get Current CMake version"
         id: cmake_version
         run: |      
-          current_cmake_major_ver=$(echo "VERSION 3.8.0" | grep -oP "\d+\.\d+" | cut -d'.' -f 1)
-          current_cmake_minor_ver=$(echo "VERSION 3.8.0" | grep -oP "\d+\.\d+" | cut -d'.' -f 2)
+          current_cmake_major_ver=$(echo "VERSION 3.12.0" | grep -oP "\d+\.\d+" | cut -d'.' -f 1)
+          current_cmake_minor_ver=$(echo "VERSION 3.12.0" | grep -oP "\d+\.\d+" | cut -d'.' -f 2)
 
           echo $current_cmake_major_ver
           echo $current_cmake_minor_ver
