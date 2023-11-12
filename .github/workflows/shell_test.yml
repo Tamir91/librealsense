@@ -45,7 +45,7 @@ jobs:
           EXPECTED_CMAKE_MINOR_VER: 8
           CURRENT_CMAKE_MAJOR_VER: ${{ steps.cmake_version.outputs.current_cmake_major_ver }}
           CURRENT_CMAKE_MINOR_VER: ${{ steps.cmake_version.outputs.current_cmake_minor_ver }}
-          RESULT: ${{ $CURRENT_CMAKE_MAJOR_VER == $EXPECTED_CMAKE_MAJOR_VER }}
+          RESULT: ${CURRENT_CMAKE_MAJOR_VER} == ${EXPECTED_CMAKE_MAJOR_VER}
           
         run: |
           echo $RESULT
