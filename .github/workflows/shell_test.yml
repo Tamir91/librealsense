@@ -18,8 +18,8 @@ jobs:
       - name: "Get Current CMake version"
         id: cmake_version
         run: |      
-          current_cmake_major_ver=$(echo "VERSION 3.12.0" | grep -oP "\d+\.\d+" | cut -d'.' -f 1)
-          current_cmake_minor_ver=$(echo "VERSION 3.12.0" | grep -oP "\d+\.\d+" | cut -d'.' -f 2)
+          current_cmake_major_ver=$(echo "VERSION 13.12.0" | grep -oP "\d+\.\d+" | cut -d'.' -f 1)
+          current_cmake_minor_ver=$(echo "VERSION 13.12.0" | grep -oP "\d+\.\d+" | cut -d'.' -f 2)
 
           echo $current_cmake_major_ver
           echo $current_cmake_minor_ver
@@ -30,12 +30,12 @@ jobs:
         
       - name: "Check minimal CMake version"
         env:
-          EXPECTED_CMAKE_MAJOR_VER: 3
+          EXPECTED_CMAKE_MAJOR_VER: 5
           EXPECTED_CMAKE_MINOR_VER: 8
           CURRENT_CMAKE_MAJOR_VER: ${{ steps.cmake_version.outputs.current_cmake_major_ver }}
           CURRENT_CMAKE_MINOR_VER: ${{ steps.cmake_version.outputs.current_cmake_minor_ver }}
           
-        if: env.CURRENT_CMAKE_MAJOR_VER == env.EXPECTED_CMAKE_MAJOR_VER
+        if: env.CURRENT_CMAKE_MAJOR_VER < env.EXPECTED_CMAKE_MAJOR_VER
         run: |
           echo "PASSED"
              
