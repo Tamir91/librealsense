@@ -17,28 +17,23 @@ project(usb)
 if(WIN32)
   LIST(APPEND LIBUSB_C
   libusb/os/threads_windows.c
-  libusb/os/poll_windows.c
   libusb/os/windows_winusb.c
-  libusb/os/windows_nt_common.c
   libusb/os/windows_usbdk.c
   )
 elseif (APPLE)
   LIST(APPEND LIBUSB_C
-  libusb/os/poll_posix.c
   libusb/os/threads_posix.c
   libusb/os/darwin_usb.c
   )
 elseif(ANDROID)
   LIST(APPEND LIBUSB_C
   libusb/os/linux_usbfs.c
-  libusb/os/poll_posix.c
   libusb/os/threads_posix.c
   libusb/os/linux_netlink.c
   )
 else()
   LIST(APPEND LIBUSB_C
   libusb/os/linux_usbfs.c
-  libusb/os/poll_posix.c
   libusb/os/threads_posix.c
   libusb/os/linux_udev.c
   )
