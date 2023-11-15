@@ -1,41 +1,61 @@
-name: test Zona
+name: Build LSUSB on Windows 2019
 
 on:
   push:
     branches: ['**']
   pull_request:
     branches: ['**']
+     
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)  
+  LRS_BUILD_CONFIG: Debug
+  LRS_RUN_CONFIG: Release
+  LRS_RUN_WITH_DEB_CONFIG: RelWithDebInfo
+  PYTHON_PATH: C:\\hostedtoolcache\\windows\\Python\\3.8.1\\x64\\python.exe
+  # GH-Actions Windows VM currently supply ~14 GB available on D drive, and ~80 GB on drive C.
+  # Building LRS statically with third parties is too much for drive D so we clone to drive 'D' and build on drive 'C'
+  WIN_BUILD_DIR: C:/lrs_build
+
 
 jobs:
-  minimal_cmake_version:
-    name: "Minimal CMake version"
-    timeout-minutes: 30
-    runs-on: ubuntu-22.04
+
+  Win_SH_EX_CfU:  # Windows, shared, with Examples & Tools, and Check for Updates
+    runs-on: windows-2019
+    timeout-minutes: 60
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
-      - name: "Get Current CMake version"
-        id: cmake_version
-        run: |      
-          current_cmake_major_ver=$(echo "VERSION 1.12.0" | grep -oP "\d+\.\d+" | cut -d'.' -f 1)
-          current_cmake_minor_ver=$(echo "VERSION 1.12.0" | grep -oP "\d+\.\d+" | cut -d'.' -f 2)
+    - name: Enable Long Paths
+      shell: powershell
+      run: |
+       New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
+    
+    - name: Check_API
+      shell: bash
+      run: |
+        cd scripts
+        ./api_check.sh
+        cd ..
 
-          echo $current_cmake_major_ver
-          echo $current_cmake_minor_ver
-          
-          # Saving cmake output in GitHub output
-          echo "current_cmake_major_ver=$current_cmake_major_ver" >> $GITHUB_OUTPUT
-          echo "current_cmake_minor_ver=$current_cmake_minor_ver" >> $GITHUB_OUTPUT
-        
-      - name: "Check minimal CMake version"
-        env:
-          EXPECTED_CMAKE_MAJOR_VER: 5
-          EXPECTED_CMAKE_MINOR_VER: 8
-          CURRENT_CMAKE_MAJOR_VER: ${{ steps.cmake_version.outputs.current_cmake_major_ver }}
-          CURRENT_CMAKE_MINOR_VER: ${{ steps.cmake_version.outputs.current_cmake_minor_ver }}
-          
-        if: env.CURRENT_CMAKE_MAJOR_VER < env.EXPECTED_CMAKE_MAJOR_VER
-        run: |
-          echo "PASSED"
-             
+    - name: PreBuild
+      shell: bash
+      run: |
+       mkdir ${{env.WIN_BUILD_DIR}}
+    
+    - name: Configure CMake
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      shell: bash
+      run: |        
+        LRS_SRC_DIR=$(pwd)
+        cd ${{env.WIN_BUILD_DIR}}
+        pwd
+        ls        
+        cmake ${LRS_SRC_DIR} -G "Visual Studio 16 2019" -DBUILD_SHARED_LIBS=true -DBUILD_EXAMPLES=true -DBUILD_TOOLS=true -DFORCE_LIBUSB=true
+
+    - name: Build
+      # Build your program with the given configuration
+      shell: bash
+      run: |
+        cd ${{env.WIN_BUILD_DIR}}
+        cmake --build . --config ${{env.LRS_RUN_CONFIG}} -- -m    
